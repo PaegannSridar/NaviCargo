@@ -80,8 +80,8 @@ def plot_path(path):
     fig.add_trace(go.Scattermapbox(
         lon=path_lons,
         lat=path_lats,
-        mode="lines+markers",
-        line=dict(width=2, color="red"),
+        mode="markers",
+        #line=dict(width=2, color="red"),
         marker=dict(size=4, color="red"),
         text=[f"{lat}, {lon}" for lat, lon in zip(path_lats, path_lons)],
         hoverinfo="lat+lon",
