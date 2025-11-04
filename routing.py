@@ -5,7 +5,6 @@ import numpy as np
 from sklearn.neighbors import BallTree
 import plotly.graph_objects as go
 
-
 # Calculate the Haversine distance between two points
 def haversine(coord1, coord2):
     lat1, lon1 = math.radians(coord1[0]), math.radians(coord1[1])
@@ -65,11 +64,7 @@ def shortest_maritime_route(G, start, end):
 
 # Plot the path on a plotly world map to visually see the route (also used for debugging purposes)
 def plot_path(path):
-    import pandas as pd
-    import plotly.graph_objects as go
-
     df = pd.read_csv("ais_nodes.csv")
-
     # Extract longitudes and latitudes for the path
     path_lons = [p[1] for p in path]
     path_lats = [p[0] for p in path]
@@ -80,13 +75,12 @@ def plot_path(path):
     fig.add_trace(go.Scattermapbox(
         lon=path_lons,
         lat=path_lats,
-        mode="markers",
-        #line=dict(width=2, color="red"),
+        mode="lines+markers",
+        line=dict(width=2, color="red"),
         marker=dict(size=4, color="red"),
         text=[f"{lat}, {lon}" for lat, lon in zip(path_lats, path_lons)],
         hoverinfo="lat+lon",
     ))
-
     # Update layout — make map larger & remove whitespace
     fig.update_layout(
         autosize=False,
