@@ -72,7 +72,7 @@ def plot_path(path):
     fig = go.Figure()
 
     # Add the path trace
-    fig.add_trace(go.Scattermapbox(
+    fig.add_trace(go.Scattermap(
         lon=path_lons,
         lat=path_lats,
         mode="lines+markers",
@@ -97,11 +97,11 @@ def plot_path(path):
 
     fig.show()
 
-graph = build_graph_knn("ais_nodes.csv")
-start = (34.0549, -118.242)
-end = (22.5744, 88.3629)
+"""graph = build_graph_knn("ais_nodes.csv")
+start = (-33.8727, 151.2057)
+end = (35.6764, 139.6500)
 path, distance = shortest_maritime_route(graph, start, end)
-plot_path(path)
+plot_path(path)"""
 
 def calculate_eta(current_loc, destination, current_speed_knots):
     # Speed is stored in my dataframe and displayed on the page in knots.
