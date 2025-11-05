@@ -1,10 +1,19 @@
+# Dictionary containing base speeds for major types of ships
 base_speeds = {"Cargo": 20, "Tanker": 15, "Fishing": 8.5, "Military Operations": 20, "Passenger Ship": 25, "Wing in Ground": 80,
                "Search and Rescue vessel": 6}
 
+# Dictionary containing average fuel consumption per day for major types of ships
 fuel_consumptions = {"Tanker": 90, "Cargo": 150, "Fishing": 7, "Passenger Ship": 150, "Military Operations": 50, "Wing in Ground": 0.9,
                      "Search and Rescue vessel": 3}
 
-def emmisions_per_km(base_speed_knots, fuel_per_day, emission_factor, current_speed):
+# Emissions factor is dependent on fuel type so the same for all ships
+emissions_factor = 3.114
+
+def emissions_per_km(ship_type, emission_factor, current_speed):
+    # Get base speed in knots and fuel per day from the dictionaries
+    base_speed_knots = base_speeds[ship_type]
+    fuel_per_day = fuel_consumptions[ship_type]
+
     base_speed_kmph = base_speed_knots * 1.852
     # Convert fuel consumption to tons/hour.
     fuel_per_hour = fuel_per_day / 24
@@ -19,3 +28,4 @@ def emmisions_per_km(base_speed_knots, fuel_per_day, emission_factor, current_sp
     emissions_per_km = emissions_per_km * speed_factor
     return emissions_per_km
 
+print(emissions_per_km("Cargo", emissions_factor, 17.4))
