@@ -9,10 +9,18 @@ fuel_consumptions = {"Tanker": 90, "Cargo": 150, "Fishing": 7, "Passenger Ship":
 # Emissions factor is dependent on fuel type so the same for all ships
 emissions_factor = 3.114
 
+default_base_speed = 14
+default_fuel_day = 50
+
 def emissions_per_km(ship_type, emission_factor, current_speed):
-    # Get base speed in knots and fuel per day from the dictionaries
-    base_speed_knots = base_speeds[ship_type]
-    fuel_per_day = fuel_consumptions[ship_type]
+
+    if ship_type in base_speeds.keys():
+        # Get base speed in knots and fuel per day from the dictionaries
+        base_speed_knots = base_speeds[ship_type]
+        fuel_per_day = fuel_consumptions[ship_type]
+    else:
+        base_speed_knots = default_base_speed
+        fuel_per_day = default_fuel_day
 
     base_speed_kmph = base_speed_knots * 1.852
     # Convert fuel consumption to tons/hour.
@@ -26,6 +34,8 @@ def emissions_per_km(ship_type, emission_factor, current_speed):
     # As ship speed increases above its base speed, fuel consumption increases
     speed_factor = (current_speed / base_speed_knots) ** 3
     emissions_per_km = emissions_per_km * speed_factor
-    return emissions_per_km
+    return emissions_per_km * 1000
 
 print(emissions_per_km("Cargo", emissions_factor, 17.4))
+
+
