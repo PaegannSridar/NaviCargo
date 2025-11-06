@@ -19,6 +19,7 @@ def emissions_per_km(ship_type, emission_factor, current_speed):
         base_speed_knots = base_speeds[ship_type]
         fuel_per_day = fuel_consumptions[ship_type]
     else:
+        # Use default values if the ship type is not in the list
         base_speed_knots = default_base_speed
         fuel_per_day = default_fuel_day
 
