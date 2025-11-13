@@ -97,11 +97,11 @@ def plot_path(path):
 
     fig.show()
 
-graph = build_graph_knn("ais_nodes.csv")
+"""graph = build_graph_knn("ais_nodes.csv")
 start = (51.6951, 4.5087)
 end = (51.22, 4.42)
 path, distance = shortest_maritime_route(graph, start, end)
-plot_path(path)
+plot_path(path)"""
 
 def calculate_eta(current_loc, destination, current_speed_knots):
     # Speed is stored in my dataframe and displayed on the page in knots.
