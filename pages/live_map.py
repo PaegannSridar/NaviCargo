@@ -59,6 +59,14 @@ def layout():
         html.Div("Live Maritime Tracking", style={"position": "absolute",
                                                   "top": "10px", "right": "12px", "font-size": "9px",
                                                   "font-weight": 450, "color": "#8b8b8b"}),
+
+        html.Div([
+            html.Button("Open Route & Emissions Calculator", id="open-route-page", n_clicks=0,
+                style={"position": "absolute", "right": "12px", "top": "50px", "padding": "3px 3px", "font-weight": "bold", "background-color": "#0474ce", "color": "white",
+                    "border": "none", "border-radius": "5px","cursor": "pointer"
+                }
+            )
+        ]),
     # Dropdown Filters
     html.Div([
         html.Div([
