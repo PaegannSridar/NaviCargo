@@ -62,10 +62,8 @@ def layout():
 
         html.Div([
             html.Button("Open Route & Emissions Calculator", id="open-route-page", n_clicks=0,
-                style={"position": "absolute", "right": "12px", "top": "50px", "padding": "3px 3px", "font-weight": "bold", "background-color": "#0474ce", "color": "white",
-                    "border": "none", "border-radius": "5px","cursor": "pointer"
-                }
-            )
+                style={"position": "absolute", "right": "12px", "top": "50px", "padding": "3px 3px", "font-weight": "bold", "background-color": "#0474ce",
+                       "color": "white", "border": "none", "border-radius": "5px","cursor": "pointer"})
         ]),
     # Dropdown Filters
     html.Div([
