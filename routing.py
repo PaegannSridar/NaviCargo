@@ -89,7 +89,7 @@ def plot_path(path):
         margin=dict(l=0, r=0, t=50, b=0),  # remove excess whitespace
         mapbox=dict(
             style="open-street-map",
-            zoom=3,  # adjust to your desired zoom level
+            zoom=3,
             center=dict(lat=sum(path_lats)/len(path_lats),
                         lon=sum(path_lons)/len(path_lons))
         ),

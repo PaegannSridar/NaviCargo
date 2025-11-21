@@ -1,6 +1,5 @@
 from dash import html, dcc
 
-import destination
 from ais_data import return_df
 import plotly.graph_objects as go
 from datetime import datetime
