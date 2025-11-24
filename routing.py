@@ -73,12 +73,12 @@ def plot_path(path):
 
     # Add the path trace
     fig.add_trace(go.Scattermap(
-        lon=path_lons,
-        lat=path_lats,
-        mode="lines+markers",
-        line=dict(width=2, color="red"),
+        lon=df['Longitude'],
+        lat=df['Latitude'],
+        mode="markers",
+        #line=dict(width=2, color="red"),
         marker=dict(size=4, color="red"),
-        text=[f"{lat}, {lon}" for lat, lon in zip(path_lats, path_lons)],
+        text=[f"{lat}, {lon}" for lat, lon in zip(df['Latitude'], df['Longitude'])],
         hoverinfo="lat+lon",
     ))
     # Update layout — make map larger & remove whitespace

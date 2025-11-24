@@ -71,6 +71,7 @@ def go_to_route_page(n_clicks):
     State("end-port", "value"),
     prevent_initial_call=True
 )
+
 def update_route_map(n_clicks, start_port, end_port):
     locode_df = pd.read_csv('UN_LOCODE.csv')
 
@@ -110,6 +111,7 @@ def update_route_map(n_clicks, start_port, end_port):
     ))
     # Update layout: The centre of the map is the average of the coordinates that lie on the path
     fig.update_layout(
+            margin={"r": 0, "t": 0, "l": 0, "b": 0},
             mapbox_style='open-street-map',
             mapbox_zoom=2,
             mapbox_center=dict(lat=sum(lats) / len(lats),
