@@ -46,6 +46,11 @@ def layout():
                 html.Br(),
                 html.Button("Calculate Route", id="calculate-route", n_clicks=0, style={"margin-top": "10px"}),
 
+                html.Div(id="info-box", style={"margin-top": "40px", "margin-left": "auto", "font-weight": "bold",
+                                                  "font-size": "18px"}),
+                html.Div(id="info-box2", style={"margin-top": "5px", "margin-left": "auto", "font-weight": "bold",
+                                               "font-size": "18px"}),
+
                 html.Br(), html.Br(),
                 html.A("⬅ Back to Live Map", href="/",
                        style={"font-weight": "bold", "font-size": "16px"})],

@@ -88,6 +88,7 @@ def extract_ship_info(mmsi):
 def layout(mmsi):
     (name, colour, country, ship_type, speed, status, lat, lon, timestamp, direction, rate_of_turn, length, width,
      flag_emoji, imo_number, draught, destination_country, destination_port, total_minutes, time_str, eta, distance) = extract_ship_info(mmsi)
+
     # Defines the mini map to be shown in the left half of the page
     mini_map = dcc.Graph(
         id="mini-map",

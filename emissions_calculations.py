@@ -12,7 +12,6 @@ reference_areas = {"Tanker": 200*30, "Cargo": 240*32, "Fishing": 40*10, "Passeng
 
 # Emissions factor is dependent on fuel type so the same for all ships
 emissions_factor = 3.114
-
 default_base_speed = 14
 default_fuel_day = 50
 default_ref_area = 200*30

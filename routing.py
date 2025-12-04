@@ -72,7 +72,7 @@ def plot_path(path):
     fig = go.Figure()
 
     # Add the path trace
-    fig.add_trace(go.Scattermap(
+    fig.add_trace(go.Scattermapbox(
         lon=df['Longitude'],
         lat=df['Latitude'],
         mode="markers",
@@ -98,8 +98,8 @@ def plot_path(path):
     fig.show()
 
 """graph = build_graph_knn("ais_nodes.csv")
-start = (51.6951, 4.5087)
-end = (51.22, 4.42)
+start = (42.75, -75.77)
+end = (35.6764, 139.6500)
 path, distance = shortest_maritime_route(graph, start, end)
 plot_path(path)"""
 

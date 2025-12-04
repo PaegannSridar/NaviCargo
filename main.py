@@ -2,12 +2,12 @@ import threading
 import time
 import logging
 import pandas as pd
-
+import dash
+import plotly.graph_objects as go
 from dash import Dash, dcc, html, Input, Output, State, no_update
 from routing import dm_to_decimal, shortest_maritime_route, build_graph_knn
 from destination import destination_to_coordinates
-import dash
-import plotly.graph_objects as go
+from emissions_calculations import emissions_per_km, emissions_factor
 
 logging.getLogger().setLevel(logging.ERROR)
 
@@ -66,6 +66,8 @@ def go_to_route_page(n_clicks):
 # Display the route on the map when the 'Calculate Route' button is clicked.
 @app.callback(
     Output("route-map", "figure"),
+    Output("info-box", "children"),
+    Output("info-box2", "children"),
     Input("calculate-route", "n_clicks"),
     State("start-port", "value"),
     State("end-port", "value"),
@@ -117,7 +119,9 @@ def update_route_map(n_clicks, start_port, end_port):
             mapbox_center=dict(lat=sum(lats) / len(lats),
                         lon=sum(lons) / len(lons)))
 
-    return fig
+    total_emissions = emissions_per_km('Cargo', emissions_factor, 18) * dist
+
+    return fig, f"Total Distance: {round(dist, 2)} km", f"Carbon Emissions: {round(total_emissions/1000, 2)} tonnes"
 
 if __name__ == "__main__":
     # Start the websocket data collection thread (so ais_df populates)
