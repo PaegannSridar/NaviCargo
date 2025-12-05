@@ -119,8 +119,10 @@ def update_route_map(n_clicks, start_port, end_port):
             mapbox_center=dict(lat=sum(lats) / len(lats),
                         lon=sum(lons) / len(lons)))
 
+    # Calculate emissions (which gives it in kg)
     total_emissions = emissions_per_km('Cargo', emissions_factor, 18) * dist
 
+    # Convert emissions to tonnes before rounding both values
     return fig, f"Total Distance: {round(dist, 2)} km", f"Carbon Emissions: {round(total_emissions/1000, 2)} tonnes"
 
 if __name__ == "__main__":

@@ -36,18 +36,20 @@ def layout():
 
         html.Div([
             html.Div([
+                # Dropdown list for start ports
                 html.Label("Start Port"),
                 dcc.Dropdown(id="start-port", options=locode_df['Name'], placeholder="Select a starting port", style={"width": "250px"}),
-
                 html.Br(),
+                # Dropdown list for end ports
                 html.Label("End Port"),
                 dcc.Dropdown(id="end-port", options=locode_df['Name'], placeholder="Select a destination port", style={"width": "250px"}),
-
                 html.Br(),
+                # Button to calculate route
                 html.Button("Calculate Route", id="calculate-route", n_clicks=0, style={"margin-top": "10px"}),
-
+                # Blank 'box' in which the distance will be displayed
                 html.Div(id="info-box", style={"margin-top": "40px", "margin-left": "auto", "font-weight": "bold",
                                                   "font-size": "18px"}),
+                # Blank 'box; in which the CO2 emission will be displayed
                 html.Div(id="info-box2", style={"margin-top": "5px", "margin-left": "auto", "font-weight": "bold",
                                                "font-size": "18px"}),
 
