@@ -32,6 +32,20 @@ def layout():
 
     return html.Div([
 
+        # Title and image logo
+        html.Div([
+            html.Div([
+                html.Img(src="/assets/NAVICARGO.png", style={"height": "20px", "margin-right": "5px"}),
+                html.Div("NaviCargo",
+                         style={"position": "absolute", "font-size": "15px", "top": "10px", "left": "30px",
+                                "font-weight": "550", "color": "#8b8b8b"})],
+                style={"display": "flex", "flex-direction": "row"}),
+
+            html.Div("Route and Emissions Calculator",
+                     style={"position": "absolute", "top": "10px", "right": "12px", "font-size": "9px",
+                            "font-weight": 450, "color": "#8b8b8b"}, )
+        ], style={"display": "flex", "background-color": "white", }),
+
         html.H2("Route and Emissions Calculator", style={"margin-bottom": "15px"}),
 
         html.Div([
@@ -49,9 +63,12 @@ def layout():
                 # Blank 'box' in which the distance will be displayed
                 html.Div(id="info-box", style={"margin-top": "40px", "margin-left": "auto", "font-weight": "bold",
                                                   "font-size": "18px"}),
-                # Blank 'box' in which the CO2 emission will be displayed
+                # Blank 'box' in which the CO2 emissions will be displayed
                 html.Div(id="info-box2", style={"margin-top": "5px", "margin-left": "auto", "font-weight": "bold",
                                                "font-size": "18px"}),
+                # Blank 'box' in which the time taken will be displayed
+                html.Div(id="info-box3", style={"margin-top": "5px", "margin-left": "auto", "font-weight": "bold",
+                                                "font-size": "18px"}),
 
                 html.Br(), html.Br(),
                 html.A("⬅ Back to Live Map", href="/",

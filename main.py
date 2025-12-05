@@ -69,6 +69,7 @@ def go_to_route_page(n_clicks):
     Output("route-map", "figure"),
     Output("info-box", "children"),
     Output("info-box2", "children"),
+    Output("info-box3", "children"),
     Output("start-port", "style"),
     Output("end-port", "style"),
     Input("calculate-route", "n_clicks"),
@@ -122,10 +123,30 @@ def update_route_map(n_clicks, start_port, end_port):
     fig.add_trace(go.Scattermapbox(
         lon=lons,
         lat=lats,
-        mode="lines+markers",
+        mode="lines",
         line=dict(width=2, color="red"),
         marker=dict(size=2, color="red"),
         hoverinfo='none'
+    ))
+
+    # Add START marker
+    fig.add_trace(go.Scattermapbox(
+        lat=[start[0]],
+        lon=[start[1]],
+        mode="markers",
+        marker=dict(size=5, color="blue"),
+        text=[start_port],
+        hoverinfo="text"
+    ))
+
+    # Add END marker
+    fig.add_trace(go.Scattermapbox(
+        lat=[end[0]],
+        lon=[end[1]],
+        mode="markers",
+        marker=dict(size=5, color="blue"),
+        text=[end_port],
+        hoverinfo="text"
     ))
     # Update layout: The centre of the map is the average of the coordinates that lie on the path
     fig.update_layout(
@@ -133,13 +154,22 @@ def update_route_map(n_clicks, start_port, end_port):
             mapbox_style='open-street-map',
             mapbox_zoom=2,
             mapbox_center=dict(lat=sum(lats) / len(lats),
-                        lon=sum(lons) / len(lons)))
+                        lon=sum(lons) / len(lons)),
+            showlegend=False)
 
     # Calculate emissions (which gives it in kg)
     total_emissions = emissions_per_km('Cargo', emissions_factor, 18) * dist
 
+    time_hours = dist / 18  # total hours
+    days = int(time_hours // 24)  # whole days
+    hours = int(time_hours % 24)  # remaining hours
+
+    # Format it as a string
+    time_string = f"Estimated Travel Time: {days} days {hours} hours"
+
     # Convert emissions to tonnes before rounding both values
-    return fig, f"Total Distance: {round(dist, 2)} km", f"Carbon Emissions: {round(total_emissions/1000, 2)} tonnes", normal_border, normal_border
+    return (fig, f"Total Distance: {round(dist, 2)} km", f"Carbon Emissions: {round(total_emissions/1000)} tonnes",
+            time_string, normal_border, normal_border)
 
 if __name__ == "__main__":
     # Start the websocket data collection thread (so ais_df populates)
