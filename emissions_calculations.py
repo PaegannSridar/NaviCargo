@@ -52,6 +52,4 @@ def emissions_per_km(ship_type, emission_factor, current_speed, length=None, wid
     emissions_per_km = emissions_per_km * speed_factor
     return emissions_per_km * 1000
 
-print(emissions_per_km("Wing in Ground", emissions_factor, 25, 15, 5))
-
 

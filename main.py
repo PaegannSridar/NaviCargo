@@ -11,7 +11,7 @@ from emissions_calculations import emissions_per_km, emissions_factor
 
 logging.getLogger().setLevel(logging.ERROR)
 
-# import your websocket & dataframe functions
+# import websocket & dataframe functions
 from ais_data import start_websocket, return_df, ais_df
 
 # import page renderers
@@ -64,10 +64,13 @@ def go_to_route_page(n_clicks):
     return no_update
 
 # Display the route on the map when the 'Calculate Route' button is clicked.
+# Update the two information boxes when the 'Calculate Route' button is clicked.
 @app.callback(
     Output("route-map", "figure"),
     Output("info-box", "children"),
     Output("info-box2", "children"),
+    Output("start-port", "style"),
+    Output("end-port", "style"),
     Input("calculate-route", "n_clicks"),
     State("start-port", "value"),
     State("end-port", "value"),
@@ -77,8 +80,21 @@ def go_to_route_page(n_clicks):
 def update_route_map(n_clicks, start_port, end_port):
     locode_df = pd.read_csv('UN_LOCODE.csv')
 
-    if not start_port or not end_port:
-        raise dash.exceptions.PreventUpdate
+    # Border styles to update the filter boxes
+    red_border = {"border": "2px solid red", "width": "250px"}
+    normal_border = {"border": "1px solid lightgrey", "width": "250px"}
+
+    # If start port is missing
+    if not start_port and end_port:
+        return no_update, no_update, no_update, red_border, normal_border
+
+    # If end port is missing
+    if start_port and not end_port:
+        return no_update, no_update, no_update, normal_border, red_border
+
+    # If both ports are missing
+    if not start_port and not end_port:
+        return no_update, no_update, no_update, red_border, red_border
 
     # Convert port names to coordinates
     start_locode = locode_df.loc[locode_df["Name"] == start_port, "Coordinates"].iloc[0]
@@ -123,12 +139,12 @@ def update_route_map(n_clicks, start_port, end_port):
     total_emissions = emissions_per_km('Cargo', emissions_factor, 18) * dist
 
     # Convert emissions to tonnes before rounding both values
-    return fig, f"Total Distance: {round(dist, 2)} km", f"Carbon Emissions: {round(total_emissions/1000, 2)} tonnes"
+    return fig, f"Total Distance: {round(dist, 2)} km", f"Carbon Emissions: {round(total_emissions/1000, 2)} tonnes", normal_border, normal_border
 
 if __name__ == "__main__":
     # Start the websocket data collection thread (so ais_df populates)
     ws_thread = threading.Thread(target=start_websocket, daemon=True)
     ws_thread.start()
-    # small wait so some data can populate
+    # Small wait so some data can populate
     time.sleep(2)
     app.run(debug=True)
