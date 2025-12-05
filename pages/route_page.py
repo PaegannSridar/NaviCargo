@@ -49,7 +49,7 @@ def layout():
                 # Blank 'box' in which the distance will be displayed
                 html.Div(id="info-box", style={"margin-top": "40px", "margin-left": "auto", "font-weight": "bold",
                                                   "font-size": "18px"}),
-                # Blank 'box; in which the CO2 emission will be displayed
+                # Blank 'box' in which the CO2 emission will be displayed
                 html.Div(id="info-box2", style={"margin-top": "5px", "margin-left": "auto", "font-weight": "bold",
                                                "font-size": "18px"}),
 
