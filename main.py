@@ -63,8 +63,26 @@ def go_to_route_page(n_clicks):
         return "/route"
     return no_update
 
+# Adjust longitudes to avoid jumps across the date line.
+def unwrap_longitudes(lons):
+    unwrapped = [lons[0]]
+    for i in range(1, len(lons)):
+        previous = unwrapped[-1]
+        current = lons[i]
+        difference = current - previous
+
+        # If jump > 180°, shift the longitude by adding/subtracting 360°
+        if difference > 180:
+            current -= 360
+        elif difference < -180:
+            current += 360
+
+        unwrapped.append(current)
+
+    return unwrapped
+
 # Display the route on the map when the 'Calculate Route' button is clicked.
-# Update the two information boxes when the 'Calculate Route' button is clicked.
+# Update the three information boxes when the 'Calculate Route' button is clicked.
 @app.callback(
     Output("route-map", "figure"),
     Output("info-box", "children"),
@@ -114,7 +132,9 @@ def update_route_map(n_clicks, start_port, end_port):
 
     # Extract lat/lon
     lats = [p[0] for p in path]
-    lons = [p[1] for p in path]
+    raw_lons = [p[1] for p in path]
+
+    lons = unwrap_longitudes(raw_lons)
 
     # Build map
     fig = go.Figure()
@@ -158,9 +178,9 @@ def update_route_map(n_clicks, start_port, end_port):
             showlegend=False)
 
     # Calculate emissions (which gives it in kg)
-    total_emissions = emissions_per_km('Cargo', emissions_factor, 18) * dist
+    total_emissions = emissions_per_km('Cargo', emissions_factor, 22) * dist
 
-    time_hours = dist / 18  # total hours
+    time_hours = dist / 37  # total hours
     days = int(time_hours // 24)  # whole days
     hours = int(time_hours % 24)  # remaining hours
 
