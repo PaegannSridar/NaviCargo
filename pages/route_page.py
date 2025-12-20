@@ -5,6 +5,30 @@ import numpy as np
 
 locode_df = pd.read_csv('UN_LOCODE.csv')
 
+# Returns the layout how the route info should be displayed
+def result_card(start_code, start_name, end_code, end_name, distance_km, days, hours, emissions_tonnes):
+    return html.Div(
+        style={"background": "white", "borderRadius": "12px", "width": "410px", "display": "flex", "padding":"5px 5px ",
+            "flexDirection": "column", "gap": "12px", "fontFamily": "sans-serif", "border":"1px solid #0474ce"},
+        children=[# TOP ROW
+            html.Div(style={"display": "flex", "justifyContent": "space-between"},
+                     children=[html.Div([ html.Div(start_code, style={"fontWeight": "bold", "fontSize": "20px"}),
+                    html.Div(start_name, style={"color": "#555"})]),
+                    html.Div([html.Div(end_code, style={"fontWeight": "bold", "fontSize": "20px"}),
+                    html.Div(end_name, style={"color": "#555"})
+                    ])]),
+            html.Div(f"{days} days {hours} hrs", style={"fontSize": "17px", "fontWeight": "500"}),
+            # BOTTOM  ROW
+            html.Div(
+                style={"display": "flex", "justifyContent": "space-between", "alignItems": "center"},
+                children=[
+                    html.Div(f"{round(distance_km)} kilometers",
+                             style={"fontSize": "16px", "color": "#555"}),
+                    html.Div(
+                        f"{round(emissions_tonnes, 2)} t CO₂",
+                        style={"background": "#E8F8EE", "borderRadius": "8px", "color": "#2A8C4A", "fontWeight": "600"}
+                    )])])
+
 def layout():
     map = go.Figure()
     map.update_layout(
@@ -63,13 +87,6 @@ def layout():
                 # Blank 'box' in which the distance will be displayed
                 html.Div(id="info-box", style={"margin-top": "40px", "margin-left": "auto", "font-weight": "bold",
                                                   "font-size": "18px"}),
-                # Blank 'box' in which the CO2 emissions will be displayed
-                html.Div(id="info-box2", style={"margin-top": "5px", "margin-left": "auto", "font-weight": "bold",
-                                               "font-size": "18px"}),
-                # Blank 'box' in which the time taken will be displayed
-                html.Div(id="info-box3", style={"margin-top": "5px", "margin-left": "auto", "font-weight": "bold",
-                                                "font-size": "18px"}),
-
                 html.Br(), html.Br(),
                 html.A("⬅ Back to Live Map", href="/",
                        style={"font-weight": "bold", "font-size": "16px"})],

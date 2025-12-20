@@ -86,8 +86,6 @@ def unwrap_longitudes(lons):
 @app.callback(
     Output("route-map", "figure"),
     Output("info-box", "children"),
-    Output("info-box2", "children"),
-    Output("info-box3", "children"),
     Output("start-port", "style"),
     Output("end-port", "style"),
     Input("calculate-route", "n_clicks"),
@@ -105,15 +103,15 @@ def update_route_map(n_clicks, start_port, end_port):
 
     # If start port is missing
     if not start_port and end_port:
-        return no_update, no_update, no_update, red_border, normal_border
+        return no_update, no_update, red_border, normal_border
 
     # If end port is missing
     if start_port and not end_port:
-        return no_update, no_update, no_update, normal_border, red_border
+        return no_update, no_update, normal_border, red_border
 
     # If both ports are missing
     if not start_port and not end_port:
-        return no_update, no_update, no_update, red_border, red_border
+        return no_update, no_update, red_border, red_border
 
     # Convert port names to coordinates
     start_locode = locode_df.loc[locode_df["Name"] == start_port, "Coordinates"].iloc[0]
@@ -187,9 +185,19 @@ def update_route_map(n_clicks, start_port, end_port):
     # Format it as a string
     time_string = f"Estimated Travel Time: {days} days {hours} hours"
 
+    card = route_page.result_card(
+        start_code=start_locode,
+        start_name=start_port,
+        end_code=end_locode,
+        end_name=end_port,
+        distance_km=dist,
+        days=days,
+        hours=hours,
+        emissions_tonnes=total_emissions/1000
+    )
+
     # Convert emissions to tonnes before rounding both values
-    return (fig, f"Total Distance: {round(dist, 2)} km", f"Carbon Emissions: {round(total_emissions/1000)} tonnes",
-            time_string, normal_border, normal_border)
+    return (fig, card, normal_border, normal_border)
 
 if __name__ == "__main__":
     # Start the websocket data collection thread (so ais_df populates)
