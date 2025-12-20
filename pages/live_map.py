@@ -60,9 +60,14 @@ def layout():
                                                   "top": "10px", "right": "12px", "font-size": "9px",
                                                   "font-weight": 450, "color": "#8b8b8b"}),
 
+        html.Button("Login / Sign Up", id="open-login-page", n_clicks=0,
+                    style={"position": "absolute", "right": "12px", "top": "30px", "padding": "4px 8px", "font-weight": "bold",
+                           "background-color": "#2c2c2c", "color": "white", "border": "none", "border-radius": "5px", "cursor": "pointer"}),
+        dcc.Location(id="login-nav"),
+
         html.Div([
             html.Button("Open Route & Emissions Calculator", id="open-route-page", n_clicks=0,
-                style={"position": "absolute", "right": "12px", "top": "50px", "padding": "3px 3px", "font-weight": "bold", "background-color": "#0474ce",
+                style={"position": "absolute", "right": "12px", "top": "60px", "padding": "3px 3px", "font-weight": "bold", "background-color": "#0474ce",
                        "color": "white", "border": "none", "border-radius": "5px","cursor": "pointer"})
         ]),
     # Dropdown Filters

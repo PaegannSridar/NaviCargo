@@ -182,9 +182,6 @@ def update_route_map(n_clicks, start_port, end_port):
     days = int(time_hours // 24)  # whole days
     hours = int(time_hours % 24)  # remaining hours
 
-    # Format it as a string
-    time_string = f"Estimated Travel Time: {days} days {hours} hours"
-
     card = route_page.result_card(
         start_code=start_locode,
         start_name=start_port,
