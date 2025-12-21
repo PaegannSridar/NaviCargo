@@ -1,11 +1,13 @@
 from dash import html, dcc
-
+import dash
 from ais_data import return_df
 import plotly.graph_objects as go
 from datetime import datetime
 import math
 from routing import dm_to_decimal, calculate_eta
 from destination import destination_to_coordinates
+
+dash.register_page(__name__, path_template="/ship/<mmsi>")
 
 # Extract all ship information to be displayed on the page
 def extract_ship_info(mmsi):

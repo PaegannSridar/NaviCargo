@@ -9,37 +9,24 @@ from routing import dm_to_decimal, shortest_maritime_route, build_graph_knn
 from destination import destination_to_coordinates
 from emissions_calculations import emissions_per_km, emissions_factor
 
+
 logging.getLogger().setLevel(logging.ERROR)
 
 # import websocket & dataframe functions
 from ais_data import start_websocket, return_df, ais_df
 
-# import page renderers
-from pages import live_map, ship_info, route_page
-
-app = Dash(__name__, suppress_callback_exceptions=True)
+app = Dash(__name__, use_pages=True, suppress_callback_exceptions=True)
 server = app.server
 
 # App layout
 app.layout = html.Div([
     dcc.Location(id="url"),
-    html.Div(id="page-content"),
-    dcc.Store(id="clicked-mmsi-store")
+    dcc.Store(id="clicked-mmsi-store"),
+    dcc.Store(id="auth-store", storage_type="session"),
+    dash.page_container
 ])
 
-# Router: serve different pages depending on pathname
-@app.callback(
-    Output("page-content", "children"),
-    Input("url", "pathname")
-)
-
-def display_page(pathname):
-    if pathname.startswith("/ship/"):
-        mmsi = pathname.split("/")[-1]
-        return ship_info.layout(mmsi)
-    elif pathname == "/route":
-        return route_page.layout()
-    return live_map.layout()
+from pages.route_page import result_card
 
 # When live_map sets clicked-mmsi-store, navigate to ship page
 @app.callback(
@@ -182,7 +169,7 @@ def update_route_map(n_clicks, start_port, end_port):
     days = int(time_hours // 24)  # whole days
     hours = int(time_hours % 24)  # remaining hours
 
-    card = route_page.result_card(
+    card = result_card(
         start_code=start_locode,
         start_name=start_port,
         end_code=end_locode,

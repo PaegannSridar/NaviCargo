@@ -1,9 +1,13 @@
+import dash
 from dash import html, dcc, Input, Output, State
 import pandas as pd
 import plotly.graph_objects as go
 import numpy as np
 
 locode_df = pd.read_csv('UN_LOCODE.csv')
+
+dash.register_page(__name__, path="/route")
+
 
 # Returns the layout how the route info should be displayed
 def result_card(start_code, start_name, end_code, end_name, distance_km, days, hours, emissions_tonnes):
@@ -88,6 +92,7 @@ def layout():
                 html.Div(id="info-box", style={"margin-top": "40px", "margin-left": "auto", "font-weight": "bold",
                                                   "font-size": "18px"}),
                 html.Br(), html.Br(),
+                # Link to go back to live map
                 html.A("⬅ Back to Live Map", href="/",
                        style={"font-weight": "bold", "font-size": "16px"})],
             style={"width": "30%", "display": "inline-block", "vertical-align": "top"}),

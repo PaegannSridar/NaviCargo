@@ -8,6 +8,7 @@ import warnings
 import logging
 import dash
 
+
 # Filter Warnings
 logging.getLogger().setLevel(logging.ERROR)
 warnings.filterwarnings("ignore")
@@ -20,6 +21,7 @@ ship_type_options = ["Wing In Ground", "Fishing", "Towing", "Towing (Large)", "D
                      "Anti-pollution Vessels", "Law Enforcement", "Spare - Local Vessel", "Medical Transport", "Noncombatant ship", "Passenger Ship",
                      "Cargo", "Tanker"]
 
+dash.register_page(__name__, path="/")
 
 # Creates an empty initial map figure
 def create_initial_figure():
@@ -59,12 +61,12 @@ def layout():
         html.Div("Live Maritime Tracking", style={"position": "absolute",
                                                   "top": "10px", "right": "12px", "font-size": "9px",
                                                   "font-weight": 450, "color": "#8b8b8b"}),
-
+        # Button for login/ sign up page
         html.Button("Login / Sign Up", id="open-login-page", n_clicks=0,
                     style={"position": "absolute", "right": "12px", "top": "30px", "padding": "4px 8px", "font-weight": "bold",
                            "background-color": "#2c2c2c", "color": "white", "border": "none", "border-radius": "5px", "cursor": "pointer"}),
-        dcc.Location(id="login-nav"),
-
+        dcc.Location(id="login"),
+        # Button to open route calculations page
         html.Div([
             html.Button("Open Route & Emissions Calculator", id="open-route-page", n_clicks=0,
                 style={"position": "absolute", "right": "12px", "top": "60px", "padding": "3px 3px", "font-weight": "bold", "background-color": "#0474ce",
@@ -170,4 +172,13 @@ def update_map(n_intervals, selected_types, selected_countries, clickData, exist
         clicked_mmsi = clickData["points"][0]["customdata"]
 
     return fig, f"Currently showing: {df_copy.shape[0]} ships", {"mmsi": clicked_mmsi} if clicked_mmsi else None
+
+@callback(
+    Output("login", "pathname"),
+    Input("open-login-page", "n_clicks"),
+    prevent_initial_call=True
+)
+def open_login(n):
+    return "/login"
+
 
