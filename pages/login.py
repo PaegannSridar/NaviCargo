@@ -18,15 +18,17 @@ layout = html.Div([
         html.Div("Login/ Sign Up", style={"position": "absolute", "top": "10px", "right": "12px", "font-size": "9px",
                                   "font-weight": 450, "color": "#8b8b8b"}),
     html.Div([
-    # Input for email
+    # Invisible box which can be used to display error messages such as invalid credentials
+    html.Div(id="login-message", style={"marginTop": "10px", "color": "red"}),
+    # Input for email. By using type="email", the browser automatically performs validation
     dcc.Input(id="email", placeholder="Email", type="email", style={"width": "100%", "marginBottom": "10px"}),
     # Input for password
     dcc.Input(id="password", placeholder="Password", type="password", style={"width": "100%", "marginBottom": "10px"}),
     # Buttons to login or sign up
     html.Button("Login", id="login-btn"),
     html.Button("Sign Up", id="signup-btn", style={"marginLeft": "10px"}),
-    # Invisible box in which a message could be displayed e.g. Invalid username or password
-    html.Div(id="login-message", style={"marginTop": "10px"}),
+    # Invisible box in which a login messages could be displayed
+    html.Div(id="login-message2", style={"marginTop": "10px"}),
     # Invisible component used to control page navigation e.g. redirecting after login
     dcc.Location(id="login-redirect"),
     # Link to go back to live map
@@ -35,6 +37,7 @@ layout = html.Div([
 
 @callback(
     Output("login-message", "children"),
+    Output("login-message2", "children"),
     Output("auth-store", "data"),
     Output("login-redirect", "pathname"),
     Input("login-btn", "n_clicks"),
@@ -47,7 +50,7 @@ def authenticate(login_clicks, signup_clicks, email, password):
 
     # Verifies that email and password was inputted
     if not email or not password:
-        return "Missing email or password", None, dash.no_update
+        return "Missing email or password", "", None, dash.no_update
     # Opens a connection to users.db
     conn = get_db()
     # The cursor is used to execute SQL commands
@@ -71,11 +74,11 @@ def authenticate(login_clicks, signup_clicks, email, password):
             conn.commit()
             conn.close()
             # Display a message and route back to the main page
-            return "Account created. Logged in.", {"email": email}, "/"
+            return "", "Account created. Logged in.", {"email": email}, "/"
         # If the user already exists, the function catches this and displays and appropriate message
         except sqlite3.IntegrityError:
             conn.close()
-            return "User already exists", None, dash.no_update
+            return "User already exists", "", None, dash.no_update
 
     # LOGIN
     # Returns records from the database where the provided email and password combination exists
@@ -89,7 +92,7 @@ def authenticate(login_clicks, signup_clicks, email, password):
 
     # If the record exists, the login is successful (display appropriate message and go back to the main page)
     if user:
-        return "Login successful", {"email": email}, "/"
+        return "", "Login successful", {"email": email}, "/"
     # Returns appropriate message if email or password is wrong and stays on the login page
-    return "Invalid credentials", None, dash.no_update
+    return "Invalid credentials", "", None, dash.no_update
 

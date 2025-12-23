@@ -6,15 +6,15 @@ import dash
 import plotly.graph_objects as go
 from dash import Dash, dcc, html, Input, Output, State, no_update
 from routing import dm_to_decimal, shortest_maritime_route, build_graph_knn
-from destination import destination_to_coordinates
 from emissions_calculations import emissions_per_km, emissions_factor
 
 
 logging.getLogger().setLevel(logging.ERROR)
 
 # import websocket & dataframe functions
-from ais_data import start_websocket, return_df, ais_df
+from ais_data import start_websocket
 
+# Create Dash app
 app = Dash(__name__, use_pages=True, suppress_callback_exceptions=True)
 server = app.server
 
@@ -26,9 +26,10 @@ app.layout = html.Div([
     dash.page_container
 ])
 
+# Import the function to display the route results
 from pages.route_page import result_card
 
-# When live_map sets clicked-mmsi-store, navigate to ship page
+# When live_map sets clicked-mmsi-store (i.e. the user clicks on the ship marker), navigate to ship page
 @app.callback(
     Output("url", "pathname", allow_duplicate=True),
     Input("clicked-mmsi-store", "data"),
@@ -50,7 +51,7 @@ def go_to_route_page(n_clicks):
         return "/route"
     return no_update
 
-# Adjust longitudes to avoid jumps across the date line.
+# Adjust longitudes to avoid jumps across the International Date Line.
 def unwrap_longitudes(lons):
     unwrapped = [lons[0]]
     for i in range(1, len(lons)):
@@ -69,7 +70,6 @@ def unwrap_longitudes(lons):
     return unwrapped
 
 # Display the route on the map when the 'Calculate Route' button is clicked.
-# Update the three information boxes when the 'Calculate Route' button is clicked.
 @app.callback(
     Output("route-map", "figure"),
     Output("info-box", "children"),
@@ -81,6 +81,7 @@ def unwrap_longitudes(lons):
     prevent_initial_call=True
 )
 
+# Function that displays the route and outputs route results
 def update_route_map(n_clicks, start_port, end_port):
     locode_df = pd.read_csv('UN_LOCODE.csv')
 
