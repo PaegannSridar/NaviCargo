@@ -6,6 +6,7 @@ from datetime import datetime
 import math
 from routing import dm_to_decimal, calculate_eta
 from destination import destination_to_coordinates
+from emissions_calculations import emissions_per_km, emissions_factor
 
 dash.register_page(__name__, path_template="/ship/<mmsi>")
 
@@ -88,8 +89,18 @@ def extract_ship_info(mmsi):
 
 # Defines and returns the page layout
 def layout(mmsi):
+
+    # Extract ship information from MMSI
     (name, colour, country, ship_type, speed, status, lat, lon, timestamp, direction, rate_of_turn, length, width,
      flag_emoji, imo_number, draught, destination_country, destination_port, total_minutes, time_str, eta, distance) = extract_ship_info(mmsi)
+
+    # If the required information is available then calculate emissions
+    if ship_type != "Unknown" and speed != "Unknown":
+
+        emissions = emissions_per_km(ship_type, emissions_factor, float(speed),
+                                     float(length) if length != "Unknown" else None, float(width) if width != "Unknown" else None)
+    else:
+        emissions = "Unavailable"
 
     # Defines the mini map to be shown in the left half of the page
     mini_map = dcc.Graph(
@@ -154,7 +165,7 @@ def layout(mmsi):
             html.Div([
                 html.H4("Detailed AIS information", style={"margin-bottom": "15px", "color":"#0474ce"}),
 
-                # A 2-column table layout there are checks so that any empty or unknown information is displayed with a '-'
+                # A 2-column table layout. There are checks so that any empty or unknown information is displayed with a '-'
                 html.Div([
                     html.Div("Speed", style={"font-weight": "600", "color": "#555"}),
                     html.Div(f"{speed} kn" if speed != "Unknown" else "-", style={"font-weight": "500"}),
@@ -198,9 +209,12 @@ def layout(mmsi):
                     html.Div("ETA", style={"font-weight": "600", "color": "#555"}),
                     html.Div(f"{eta} hours" if eta != "Unavailable" else eta, style={"font-weight": "500"}),
                     html.Div("Distance to Destination", style={"font-weight": "600", "color": "#555"}),
-                    html.Div(f"{distance} km" if isinstance(distance, int) == True else distance, style={"font-weight": "500"}),],
+                    html.Div(f"{distance} km" if isinstance(distance, int) == True else distance, style={"font-weight": "500"}),
+                    html.Div("Estimated Emissions", style={"font-weight": "600", "color": "#555"}),
+                    html.Div(f"{round(emissions/1000,3)} t CO₂ per kilometer" if emissions != "Unavailable" else emissions, style={"font-weight": "500"})],
                     # Table-like layout styling
                     style={"display": "grid", "grid-template-columns": "170px auto", "row-gap": "12px"})],
             style={"border": "2px solid #dfdfdf", "border-radius": "10px", "padding": "15px", "width": "350px","position": "absolute", "top": "130px",
                 "right": "403px", "background-color": "white"})
             ])])
+

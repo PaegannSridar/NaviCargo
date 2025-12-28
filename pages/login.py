@@ -24,9 +24,12 @@ layout = html.Div([
     dcc.Input(id="email", placeholder="Email", type="email", style={"width": "100%", "marginBottom": "10px"}),
     # Input for password
     dcc.Input(id="password", placeholder="Password", type="password", style={"width": "100%", "marginBottom": "10px"}),
-    # Buttons to login or sign up
-    html.Button("Login", id="login-btn"),
-    html.Button("Sign Up", id="signup-btn", style={"marginLeft": "10px"}),
+    # Button to login
+    html.Button("Login", id="login-btn", style={"width": "100%", "marginBottom": "10px", "font-size": "20px", "background-color": "#2c2c2c",
+                                                "color": "white", "border": "none", "border-radius": "5px", "cursor": "pointer"}),
+    # Button to sign up
+    html.Button("Sign Up", id="signup-btn", style={"width":"100%","marginBottom": "10px", "font-size":"20px", "background-color": "#0474ce",
+                                                   "color": "white", "border": "none", "border-radius": "5px", "cursor": "pointer"}),
     # Invisible box in which a login messages could be displayed
     html.Div(id="login-message2", style={"marginTop": "10px"}),
     # Invisible component used to control page navigation e.g. redirecting after login

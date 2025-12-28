@@ -9,7 +9,7 @@ locode_df = pd.read_csv('UN_LOCODE.csv')
 dash.register_page(__name__, path="/route")
 
 
-# Returns the layout how the route info should be displayed
+# Returns the layout of how the route info should be displayed
 def result_card(start_code, start_name, end_code, end_name, distance_km, days, hours, emissions_tonnes):
     return html.Div(
         style={"background": "white", "borderRadius": "12px", "width": "410px", "display": "flex", "padding":"5px 5px ",
@@ -33,7 +33,10 @@ def result_card(start_code, start_name, end_code, end_name, distance_km, days, h
                         style={"background": "#E8F8EE", "borderRadius": "8px", "color": "#2A8C4A", "fontWeight": "600"}
                     )])])
 
+# Returns the layout of the route
 def layout():
+    # List of container sizes to be used in the dropdown menu
+    containers=["10ft GP", "10ft HC", "20ft GP", "20ft HC", "30ft GP", "30ft HC", "40ft GP", "40ft HC"]
     map = go.Figure()
     map.update_layout(
         mapbox_style="open-street-map",
@@ -44,7 +47,7 @@ def layout():
         hovermode='closest',
         margin={"r": 0, "t": 0, "l": 0, "b": 0}
     )
-    # Add empty trace to be populated later with ship markers
+    # Add empty trace to be populated with the route lines later
     map.add_trace(go.Scattermapbox(
         lat=[],
         lon=[],
@@ -70,25 +73,45 @@ def layout():
                 style={"display": "flex", "flex-direction": "row"}),
 
             html.Div("Route and Emissions Calculator",
-                     style={"position": "absolute", "top": "10px", "right": "12px", "font-size": "9px",
-                            "font-weight": 450, "color": "#8b8b8b"}, )
-        ], style={"display": "flex", "background-color": "white", }),
+                     style={"position": "absolute", "top": "10px", "right": "12px", "font-size": "9px", "font-weight": 450, "color": "#8b8b8b"}, )],
+            style={"display": "flex", "background-color": "white", }),
 
+        # Page heading
         html.H2("Route and Emissions Calculator", style={"margin-bottom": "15px"}),
 
         html.Div([
             html.Div([
                 # Dropdown list for start ports
                 html.Label("Start Port"),
-                dcc.Dropdown(id="start-port", options=locode_df['Name'], placeholder="Select a starting port", style={"width": "250px"}),
+                dcc.Dropdown(id="start-port", options=locode_df['Name'], placeholder="Select a starting port",
+                             style={"width": "250px", "border":"1px solid #d9d9d9", "border-radius":"5px"},),
                 html.Br(),
                 # Dropdown list for end ports
                 html.Label("End Port"),
-                dcc.Dropdown(id="end-port", options=locode_df['Name'], placeholder="Select a destination port", style={"width": "250px"}),
+                dcc.Dropdown(id="end-port", options=locode_df['Name'], placeholder="Select a destination port",
+                             style={"width": "250px", "border":"1px solid #d9d9d9", "border-radius":"5px"}),
+                html.Br(),
+
+                # Dropdown lists, displayed side by side on the same row
+                html.Div([
+                    html.Div([
+                        # Dropdown list for container sizes
+                        html.Label([html.Img(src="/assets/Container Icon.png", style={"height": "16px", "margin-right": "6px",
+                                                                                      "vertical-align": "middle"}), "Cargo"],
+                                   style={"display": "flex", "align-items": "center"}),
+                        dcc.Dropdown(id="container-size", options=containers, placeholder="Container size",
+                                     style={"width": "200px", "margin-right":"10px", "border":"1px solid #d9d9d9", "border-radius":"5px"})]),
+
+                    html.Div([
+                        # Input box for quantity of cargo
+                        html.Label("Quantity", style={"display": "flex", "alignItems": "center"}),
+                        dcc.Input(id="quantity", type="text",
+                                  style={"width": "40px", "height": "33px", "border":"1px solid #d9d9d9", "border-radius":"5px"})])],
+                    style={"display": "flex", "flex-direction": "row", "margin-top": "10px", "margin-bottom": "2px"}),
                 html.Br(),
                 # Button to calculate route
-                html.Button("Calculate Route", id="calculate-route", n_clicks=0, style={"margin-top": "10px"}),
-                # Blank 'box' in which the distance will be displayed
+                html.Button("Calculate Route", id="calculate-route", n_clicks=0, style={"margin-left":"5px"}),
+                # Invisible 'box' in which the route information will be displayed
                 html.Div(id="info-box", style={"margin-top": "40px", "margin-left": "auto", "font-weight": "bold",
                                                   "font-size": "18px"}),
                 html.Br(), html.Br(),

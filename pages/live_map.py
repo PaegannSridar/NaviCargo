@@ -68,7 +68,7 @@ def layout():
         dcc.Location(id="login"),
         # Button to open route calculations page
         html.Div([
-            html.Button("Open Route & Emissions Calculator", id="open-route-page", n_clicks=0,
+            html.Button("Route & Emissions Calculator", id="open-route-page", n_clicks=0,
                 style={"position": "absolute", "right": "12px", "top": "60px", "padding": "3px 3px", "font-weight": "bold", "background-color": "#0474ce",
                        "color": "white", "border": "none", "border-radius": "5px","cursor": "pointer"})
         ]),

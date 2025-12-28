@@ -16,6 +16,7 @@ default_base_speed = 14
 default_fuel_day = 50
 default_ref_area = 200*30
 
+# Calculate emissions per kilometer in kg
 def emissions_per_km(ship_type, emission_factor, current_speed, length=None, width=None):
 
     if ship_type in base_speeds.keys():
@@ -27,7 +28,7 @@ def emissions_per_km(ship_type, emission_factor, current_speed, length=None, wid
         base_speed_knots = default_base_speed
         fuel_per_day = default_fuel_day
 
-    if length is not None and width is not None:
+    if (length is not None and width is not None) and (length != 0 and width != 0):
 
         # Reference hull area for scaling
         reference_area = reference_areas[ship_type] if ship_type in reference_areas.keys() else default_ref_area
@@ -48,8 +49,10 @@ def emissions_per_km(ship_type, emission_factor, current_speed, length=None, wid
     # CO2 emissions per km at the base speed; emissions factor is known for every type of vessel
     emissions_per_km = fuel_per_km * emission_factor
     # As ship speed increases above its base speed, fuel consumption increases
-    speed_factor = max((current_speed / base_speed_knots) ** 3, 0.05)
+    speed_factor = max((current_speed / base_speed_knots) ** 3, 0.15)
     emissions_per_km = emissions_per_km * speed_factor
+
+    # Return emissions per kilometer in kg
     return emissions_per_km * 1000
 
 
