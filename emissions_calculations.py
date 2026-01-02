@@ -55,7 +55,7 @@ def emissions_per_km(ship_type, emission_factor, current_speed, length=None, wid
     # Return emissions per kilometer in kg
     return emissions_per_km * 1000
 
-# Function to calculate emissions in terms of TEU (Twenty-foot Equivalent Unit)
+# Allocate a proportion of total ship CO₂ emissions to a given container shipment
 def container_emissions(container_type, quantity, total_ship_emissions):
     # Total ship emissions is 10000 TEU. Divide the TEU of the container by 10000 to get the proportion of total emissions.
     # Multiply by total emissions of the ship to get emissions and multiply by the number of containers being shipped by the user
