@@ -56,9 +56,9 @@ def emissions_per_km(ship_type, emission_factor, current_speed, length=None, wid
     return emissions_per_km * 1000
 
 # Function to calculate emissions in terms of TEU (Twenty-foot Equivalent Unit)
-def emissions_teu(container_type, quantity, total_ship_emissions):
+def container_emissions(container_type, quantity, total_ship_emissions):
     # Total ship emissions is 10000 TEU. Divide the TEU of the container by 10000 to get the proportion of total emissions.
-    # Multiply by total emissions of the ship to get emissions in TEU and multiply by the number of containers being shipped by the user
+    # Multiply by total emissions of the ship to get emissions and multiply by the number of containers being shipped by the user
     # 10ft is 0.5 TEU, 20ft is 1 TEU, 30ft is 1.5 TEU and 40 ft is 2 TEU
     if container_type == "10ft GP" or container_type == "10ft HC":
         emissions_teu = (0.5/ 10000) * total_ship_emissions * quantity
@@ -77,3 +77,4 @@ def emissions_teu(container_type, quantity, total_ship_emissions):
         emissions_teu = emissions_teu * 1.13
 
     return emissions_teu
+
