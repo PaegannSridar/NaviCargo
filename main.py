@@ -75,14 +75,18 @@ def unwrap_longitudes(lons):
     Output("info-box", "children"),
     Output("start-port", "style"),
     Output("end-port", "style"),
+    Output("container-size", "style"),
+    Output("quantity", "style"),
     Input("calculate-route", "n_clicks"),
     State("start-port", "value"),
     State("end-port", "value"),
+    State("container-size", "value"),
+    State("quantity", "value"),
     prevent_initial_call=True
 )
 
 # Function that displays the route and outputs route results
-def update_route_map(n_clicks, start_port, end_port):
+def update_route_map(n_clicks, start_port, end_port, container_size, quantity):
     locode_df = pd.read_csv('UN_LOCODE.csv')
 
     # Border styles to update the filter boxes
@@ -166,8 +170,6 @@ def update_route_map(n_clicks, start_port, end_port):
     # Calculate emissions (which gives it in kg)
     total_emissions = emissions_per_km('Cargo', emissions_factor, 22) * dist
 
-    emissions_per_container = total_emissions/ 10000
-
     time_hours = dist / 37  # total hours
     days = int(time_hours // 24)  # whole days
     hours = int(time_hours % 24)  # remaining hours
@@ -180,7 +182,7 @@ def update_route_map(n_clicks, start_port, end_port):
         distance_km=dist,
         days=days,
         hours=hours,
-        emissions_tonnes=emissions_per_container/1000
+        emissions_tonnes=total_emissions/1000
     )
 
     # Convert emissions to tonnes before rounding both values

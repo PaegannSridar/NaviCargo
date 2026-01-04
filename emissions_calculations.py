@@ -61,20 +61,21 @@ def container_emissions(container_type, quantity, total_ship_emissions):
     # Multiply by total emissions of the ship to get emissions and multiply by the number of containers being shipped by the user
     # 10ft is 0.5 TEU, 20ft is 1 TEU, 30ft is 1.5 TEU and 40 ft is 2 TEU
     if container_type == "10ft GP" or container_type == "10ft HC":
-        emissions_teu = (0.5/ 10000) * total_ship_emissions * quantity
+        shipment_emissions = (0.5/ 10000) * total_ship_emissions * quantity
 
     elif container_type == "20ft GP" or container_type == "20ft HC":
-        emissions_teu = (1/10000) * total_ship_emissions * quantity
+        shipment_emissions = (1/10000) * total_ship_emissions * quantity
 
     elif container_type == "30ft GP" or container_type == "30ft HC":
-        emissions_teu = (1.5/10000) * total_ship_emissions * quantity
+        shipment_emissions = (1.5/10000) * total_ship_emissions * quantity
 
     else:
-        emissions_teu = (2/10000) * total_ship_emissions * quantity
+        shipment_emissions = (2/10000) * total_ship_emissions * quantity
 
     # If the container is high cube, increase emissions by 13% in order to account for higher volume
     if container_type == "10ft HC" or container_type == "20ft HC" or container_type == "30ft HC" or container_type == "40ft HC":
-        emissions_teu = emissions_teu * 1.13
+        shipment_emissions = shipment_emissions * 1.13
 
-    return emissions_teu
+
+    return shipment_emissions
 
