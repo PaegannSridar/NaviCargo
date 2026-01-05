@@ -22,6 +22,7 @@ server = app.server
 app.layout = html.Div([
     dcc.Location(id="url"),
     dcc.Store(id="clicked-mmsi-store"),
+    # Store login state
     dcc.Store(id="auth-store", storage_type="session"),
     dash.page_container
 ])
@@ -51,6 +52,16 @@ def go_to_route_page(n_clicks):
         return "/route"
     return no_update
 
+@app.callback(
+    Output("url", "pathname", allow_duplicate=True),
+    Input("open-login-page", "n_clicks"),
+    prevent_initial_call=True
+)
+def go_to_login(n_clicks):
+    if n_clicks:
+        return "/login"
+    return dash.no_update
+
 # Adjust longitudes to avoid jumps across the International Date Line.
 def unwrap_longitudes(lons):
     unwrapped = [lons[0]]
@@ -69,13 +80,23 @@ def unwrap_longitudes(lons):
 
     return unwrapped
 
+@app.callback(
+    Output("url", "pathname"),
+    Input("auth-store", "data"),
+    State("url", "pathname"),
+    prevent_initial_call=True
+)
+def handle_login_redirect(auth_data, current_path):
+    if auth_data and current_path == "/login":
+        return "/"
+    return dash.no_update
+
 # Display the route on the map when the 'Calculate Route' button is clicked.
 @app.callback(
     Output("route-map", "figure"),
     Output("info-box", "children"),
     Output("start-port", "style"),
     Output("end-port", "style"),
-    Output("container-size", "style"),
     Input("calculate-route", "n_clicks"),
     State("start-port", "value"),
     State("end-port", "value"),
@@ -195,7 +216,7 @@ def update_route_map(n_clicks, start_port, end_port, container_size, quantity):
     )
 
     # Convert emissions to tonnes before rounding both values
-    return fig, card, normal_border, normal_border, normal_border
+    return fig, card, normal_border, normal_border
 
 if __name__ == "__main__":
     # Start the websocket data collection thread (so ais_df populates)

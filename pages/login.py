@@ -8,8 +8,6 @@ def get_db():
     return sqlite3.connect("users.db", check_same_thread=False)
 
 layout = html.Div([
-    # Store login state
-    dcc.Store(id="auth-store"),
     # Title and image logo
     html.Img(src="/assets/NAVICARGO.png",
                  style={"height": "20px", "margin-right": "5px"}),
@@ -32,8 +30,6 @@ layout = html.Div([
                                                    "color": "white", "border": "none", "border-radius": "5px", "cursor": "pointer"}),
     # Invisible box in which a login messages could be displayed
     html.Div(id="login-message2", style={"marginTop": "10px"}),
-    # Invisible component used to control page navigation e.g. redirecting after login
-    dcc.Location(id="login-redirect"),
     # Link to go back to live map
     html.A("⬅ Back to Live Map", href="/", style={"font-weight": "bold", "font-size": "16px"})],
         style={"width": "300px", "margin": "auto", "marginTop": "120px"}),])
@@ -42,7 +38,6 @@ layout = html.Div([
     Output("login-message", "children"),
     Output("login-message2", "children"),
     Output("auth-store", "data"),
-    Output("login-redirect", "pathname"),
     Input("login-btn", "n_clicks"),
     Input("signup-btn", "n_clicks"),
     State("email", "value"),
@@ -53,7 +48,7 @@ def authenticate(login_clicks, signup_clicks, email, password):
 
     # Verifies that email and password was inputted
     if not email or not password:
-        return "Missing email or password", "", None, dash.no_update
+        return "Missing email or password", "", None
     # Opens a connection to users.db
     conn = get_db()
     # The cursor is used to execute SQL commands
@@ -81,7 +76,7 @@ def authenticate(login_clicks, signup_clicks, email, password):
         # If the user already exists, the function catches this and displays and appropriate message
         except sqlite3.IntegrityError:
             conn.close()
-            return "User already exists", "", None, dash.no_update
+            return "User already exists", "", None
 
     # LOGIN
     # Returns records from the database where the provided email and password combination exists
@@ -95,7 +90,7 @@ def authenticate(login_clicks, signup_clicks, email, password):
 
     # If the record exists, the login is successful (display appropriate message and go back to the main page)
     if user:
-        return "", "Login successful", {"email": email}, "/"
+        return "", "Login successful", {"email": email}
     # Returns appropriate message if email or password is wrong and stays on the login page
-    return "Invalid credentials", "", None, dash.no_update
+    return "Invalid credentials", "", None
 

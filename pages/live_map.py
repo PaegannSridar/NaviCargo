@@ -61,11 +61,7 @@ def layout():
         html.Div("Live Maritime Tracking", style={"position": "absolute",
                                                   "top": "10px", "right": "12px", "font-size": "9px",
                                                   "font-weight": 450, "color": "#8b8b8b"}),
-        # Button for login/ sign up page
-        html.Button("Login / Sign Up", id="open-login-page", n_clicks=0,
-                    style={"position": "absolute", "right": "12px", "top": "30px", "padding": "4px 8px", "font-weight": "bold",
-                           "background-color": "#2c2c2c", "color": "white", "border": "none", "border-radius": "5px", "cursor": "pointer"}),
-        dcc.Location(id="login"),
+        html.Div(id="authentication"),
         # Button to open route calculations page
         html.Div([
             html.Button("Route & Emissions Calculator", id="open-route-page", n_clicks=0,
@@ -174,11 +170,17 @@ def update_map(n_intervals, selected_types, selected_countries, clickData, exist
     return fig, f"Currently showing: {df_copy.shape[0]} ships", {"mmsi": clicked_mmsi} if clicked_mmsi else None
 
 @callback(
-    Output("login", "pathname"),
-    Input("open-login-page", "n_clicks"),
-    prevent_initial_call=True
+    Output("authentication", "children"),
+    Input("auth-store", "data")
 )
-def open_login(n):
-    return "/login"
+def update_auth_area(auth_data):
+    if auth_data is None:
+        # User not logged in
+        return  html.Button("Login / Sign Up", id="open-login-page", n_clicks=0,
+                    style={"position": "absolute", "right": "12px", "top": "30px", "padding": "4px 8px", "font-weight": "bold",
+                           "background-color": "#2c2c2c", "color": "white", "border": "none", "border-radius": "5px", "cursor": "pointer"})
 
-
+    # User logged in
+    return html.Div(
+        "Logged in",
+        style={"position":"absolute","top":"30px", "right":"12px", "color": "#2c2c2c", "font-weight": "bold"})

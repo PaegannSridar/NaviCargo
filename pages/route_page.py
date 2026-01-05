@@ -16,21 +16,21 @@ def result_card(start_code, start_name, end_code, end_name, distance_km, days, h
             "flexDirection": "column", "gap": "12px", "fontFamily": "sans-serif", "border":"1px solid #0474ce"},
         children=[# TOP ROW
             html.Div(style={"display": "flex", "justifyContent": "space-between"},
-                     children=[html.Div([ html.Div(start_code, style={"fontWeight": "bold", "fontSize": "20px"}),
+                     children=[html.Div([ html.Div(start_code, style={"font-weight": "bold", "font-size": "20px"}),
                     html.Div(start_name, style={"color": "#555"})]),
-                    html.Div([html.Div(end_code, style={"fontWeight": "bold", "fontSize": "20px"}),
+                    html.Div([html.Div(end_code, style={"font-weight": "bold", "font-size": "20px"}),
                     html.Div(end_name, style={"color": "#555"})
                     ])]),
-            html.Div(f"{days} days {hours} hrs", style={"fontSize": "17px", "fontWeight": "500"}),
+            html.Div(f"{days} days {hours} hrs", style={"font-size": "17px", "font-weight": "500"}),
             # BOTTOM  ROW
             html.Div(
-                style={"display": "flex", "justifyContent": "space-between", "alignItems": "center"},
+                style={"display": "flex", "justify-content": "space-between", "align-items": "center"},
                 children=[
                     html.Div(f"{round(distance_km)} kilometers",
                              style={"fontSize": "16px", "color": "#555"}),
                     html.Div(
                         f"{round(emissions_tonnes, 2)} t CO₂",
-                        style={"background": "#E8F8EE", "borderRadius": "8px", "color": "#2A8C4A", "fontWeight": "600"}
+                        style={"background": "#E8F8EE", "border-radius": "8px", "color": "#2A8C4A", "font-weight": "600"}
                     )])])
 
 # Returns the layout of the route
@@ -106,11 +106,13 @@ def layout():
                         # Input box for quantity of cargo
                         html.Label("Quantity", style={"display": "flex", "alignItems": "center"}),
                         dcc.Input(id="quantity", type="text",
-                                  style={"width": "40px", "height": "33px", "border":"1px solid #d9d9d9", "border-radius":"5px"})])],
+                                  style={"width": "40px", "height": "33px", "border":"1px solid #d9d9d9", "border-radius":"5px", "text-align":"center"})])],
                     style={"display": "flex", "flex-direction": "row", "margin-top": "10px", "margin-bottom": "2px"}),
                 html.Br(),
                 # Button to calculate route
-                html.Button("Calculate Route", id="calculate-route", n_clicks=0, style={"margin-left":"5px"}),
+                html.Button("Calculate Route", id="calculate-route", n_clicks=0,
+                            style={"width":"250px", "margin-bottom":"10px", "font-size":"15px", "background-color":"#0474ce", "color":"white",
+                                   "border":"none", "border-radius":"5px", "cursor":"pointer"}),
                 # Invisible 'box' in which the route information will be displayed
                 html.Div(id="info-box", style={"margin-top": "40px", "margin-left": "auto", "font-weight": "bold",
                                                   "font-size": "18px"}),
