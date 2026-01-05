@@ -6,7 +6,7 @@ import dash
 import plotly.graph_objects as go
 from dash import Dash, dcc, html, Input, Output, State, no_update
 from routing import dm_to_decimal, shortest_maritime_route, build_graph_knn
-from emissions_calculations import emissions_per_km, emissions_factor
+from emissions_calculations import emissions_per_km, emissions_factor, container_emissions
 
 
 logging.getLogger().setLevel(logging.ERROR)
@@ -76,7 +76,6 @@ def unwrap_longitudes(lons):
     Output("start-port", "style"),
     Output("end-port", "style"),
     Output("container-size", "style"),
-    Output("quantity", "style"),
     Input("calculate-route", "n_clicks"),
     State("start-port", "value"),
     State("end-port", "value"),
@@ -93,16 +92,23 @@ def update_route_map(n_clicks, start_port, end_port, container_size, quantity):
     red_border = {"border": "2px solid red", "width": "250px"}
     normal_border = {"border": "1px solid lightgrey", "width": "250px"}
 
+    # If user doesn't enter container type then default to a standard 20ft container
+    if not container_size:
+        container_size = "20ft GP"
+    # If user doesn't enter quantity then default to 1 container
+    if not quantity:
+        quantity = 1
+
     # If start port is missing
     if not start_port and end_port:
         return no_update, no_update, red_border, normal_border
 
     # If end port is missing
-    if start_port and not end_port:
+    elif start_port and not end_port:
         return no_update, no_update, normal_border, red_border
 
     # If both ports are missing
-    if not start_port and not end_port:
+    elif not start_port and not end_port:
         return no_update, no_update, red_border, red_border
 
     # Convert port names to coordinates
@@ -170,6 +176,9 @@ def update_route_map(n_clicks, start_port, end_port, container_size, quantity):
     # Calculate emissions (which gives it in kg)
     total_emissions = emissions_per_km('Cargo', emissions_factor, 22) * dist
 
+    # Calculate the part of the ship's emissions allocated to the users shipment
+    shipment_emissions = container_emissions(container_size, float(quantity), float(total_emissions))
+
     time_hours = dist / 37  # total hours
     days = int(time_hours // 24)  # whole days
     hours = int(time_hours % 24)  # remaining hours
@@ -182,11 +191,11 @@ def update_route_map(n_clicks, start_port, end_port, container_size, quantity):
         distance_km=dist,
         days=days,
         hours=hours,
-        emissions_tonnes=total_emissions/1000
+        emissions_tonnes=shipment_emissions/1000
     )
 
     # Convert emissions to tonnes before rounding both values
-    return (fig, card, normal_border, normal_border)
+    return fig, card, normal_border, normal_border, normal_border
 
 if __name__ == "__main__":
     # Start the websocket data collection thread (so ais_df populates)

@@ -76,6 +76,6 @@ def container_emissions(container_type, quantity, total_ship_emissions):
     if container_type == "10ft HC" or container_type == "20ft HC" or container_type == "30ft HC" or container_type == "40ft HC":
         shipment_emissions = shipment_emissions * 1.13
 
-
+    # Return the proportion of the ship's emissions allocated to the users shipment
     return shipment_emissions
 
