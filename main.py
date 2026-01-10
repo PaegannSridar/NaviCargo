@@ -49,6 +49,7 @@ def navigate_to_ship(store_data):
     prevent_initial_call=True
 )
 def go_to_route_page(n_clicks, auth_data):
+    # Prevent callback from executing if the button was not clicked
     if not n_clicks:
         raise dash.exceptions.PreventUpdate
 
