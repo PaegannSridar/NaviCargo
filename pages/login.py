@@ -46,9 +46,14 @@ layout = html.Div([
 )
 def authenticate(login_clicks, signup_clicks, email, password):
 
-    # Verifies that email and password was inputted
-    if not email or not password:
-        return "Missing email or password", "", None
+    # If neither button was clicked then stop the callback
+    if login_clicks is None and signup_clicks is None:
+        raise dash.exceptions.PreventUpdate
+
+    if dash.ctx.triggered_id == "signup-btn" or dash.ctx.triggered_id == "login-btn":
+        # Verifies that email and password was inputted
+        if not email or not password:
+            return "Missing email or password", "", None
     # Opens a connection to users.db
     conn = get_db()
     # The cursor is used to execute SQL commands
@@ -72,7 +77,7 @@ def authenticate(login_clicks, signup_clicks, email, password):
             conn.commit()
             conn.close()
             # Display a message and route back to the main page
-            return "", "Account created. Logged in.", {"email": email}, "/"
+            return "", "Account created. Logged in.", {"email": email}
         # If the user already exists, the function catches this and displays and appropriate message
         except sqlite3.IntegrityError:
             conn.close()

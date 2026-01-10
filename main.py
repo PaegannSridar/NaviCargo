@@ -45,12 +45,19 @@ def navigate_to_ship(store_data):
 @app.callback(
     Output("url", "pathname", allow_duplicate=True),
     Input("open-route-page", "n_clicks"),
+    State("auth-store", "data"),
     prevent_initial_call=True
 )
-def go_to_route_page(n_clicks):
-    if n_clicks:
-        return "/route"
-    return no_update
+def go_to_route_page(n_clicks, auth_data):
+    if not n_clicks:
+        raise dash.exceptions.PreventUpdate
+
+    # If not logged in, go to login page
+    if auth_data is None:
+        return "/login"
+
+    # If logged in, go to the route page
+    return "/route"
 
 @app.callback(
     Output("url", "pathname", allow_duplicate=True),

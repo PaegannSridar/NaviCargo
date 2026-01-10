@@ -61,6 +61,7 @@ def layout():
         html.Div("Live Maritime Tracking", style={"position": "absolute",
                                                   "top": "10px", "right": "12px", "font-size": "9px",
                                                   "font-weight": 450, "color": "#8b8b8b"}),
+        # Placeholder for login button/ login message
         html.Div(id="authentication"),
         # Button to open route calculations page
         html.Div([
