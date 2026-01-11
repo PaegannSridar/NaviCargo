@@ -83,7 +83,7 @@ def layout():
         style={"display": "flex", "flex-direction": "row", "margin-top": "10px", "margin-bottom": "2px"}),
 
     # Map
-    dcc.Graph(id='live-map', figure=create_initial_figure()),
+    dcc.Graph(id='live-map', figure=create_initial_figure(), config={"scrollZoom": True}),
     dcc.Interval(
         id='interval-component',
         interval=5*1000,  # every 5 seconds

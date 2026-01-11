@@ -103,26 +103,10 @@ def layout(mmsi):
         emissions = "Unavailable"
 
     # Defines the mini map to be shown in the left half of the page
-    mini_map = dcc.Graph(
-        id="mini-map",
-        figure=go.Figure(
-            go.Scattermapbox(
-                lat=[lat],
-                lon=[lon],
-                mode="markers",
-                marker=dict(size=9, color=colour),
-                text=[name],
-                hoverinfo="text"
-            )
-        ).update_layout(
-            mapbox_style="open-street-map",
-            mapbox_zoom=6,
-            mapbox_center={"lat": lat, "lon": lon},
-            height=280,
-            width=600,
-            margin={"r": 0, "l": 0, "t": 0, "b": 0}
-        )
-    )
+    mini_map = dcc.Graph(id="mini-map",figure=go.Figure(go.Scattermapbox(lat=[lat], lon=[lon], mode="markers", marker=dict(size=9, color=colour),
+                                                                         text=[name], hoverinfo="text")).update_layout(
+        mapbox_style="open-street-map", mapbox_zoom=6, mapbox_center={"lat": lat, "lon": lon}, height=280, width=600, margin={"r": 0, "l": 0, "t": 0, "b": 0}),
+                         config={"scrollZoom": True})
 
     # Returns the layout of the ship_info page
     return html.Div([

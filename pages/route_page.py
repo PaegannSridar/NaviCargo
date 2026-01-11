@@ -123,7 +123,7 @@ def layout():
             style={"width": "30%", "display": "inline-block", "vertical-align": "top"}),
 
             html.Div([
-                dcc.Graph(id="route-map", figure=map)],
+                dcc.Graph(id="route-map", figure=map, config={"scrollZoom": True})],
             style={"width": "65%", "display": "inline-block"})
         ])
     ])
