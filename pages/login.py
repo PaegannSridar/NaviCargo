@@ -7,6 +7,16 @@ dash.register_page(__name__, path="/login")
 def get_db():
     return sqlite3.connect("users.db", check_same_thread=False)
 
+def validate_email(email):
+    valid = True
+    # Ensure that @ is in the email and ensure that it is not at the start or end
+    if '@' not in email or email[0] == '@' or email[-1] == '@':
+        valid = False
+    # Ensure that there is a dot after the @.
+    elif email.find('.', email.index('@')) != -1:
+        valid = False
+    return valid
+
 layout = html.Div([
     # Title and image logo
     html.Img(src="/assets/NAVICARGO.png",
