@@ -1,7 +1,6 @@
 # Imports
 import threading
 import time
-import logging
 import pandas as pd
 import dash
 import plotly.graph_objects as go
@@ -10,7 +9,6 @@ from routing import dm_to_decimal, shortest_maritime_route, build_graph_knn
 from emissions_calculations import emissions_per_km, emissions_factor, container_emissions
 
 
-logging.getLogger().setLevel(logging.ERROR)
 
 # import websocket & dataframe functions
 from ais_data import start_websocket
@@ -150,7 +148,7 @@ def update_route_map(n_clicks, start_port, end_port, container_size, quantity):
     start = dm_to_decimal(start_locode)
     end   = dm_to_decimal(end_locode)
 
-    # Build a maritime graph
+    # Build a graph of maritime routes
     graph = build_graph_knn('ais_nodes.csv')
 
     # Use the routing function

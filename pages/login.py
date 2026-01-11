@@ -7,13 +7,14 @@ dash.register_page(__name__, path="/login")
 def get_db():
     return sqlite3.connect("users.db", check_same_thread=False)
 
+# Checks if an email address is in the correct format
 def validate_email(email):
     valid = True
     # Ensure that @ is in the email and ensure that it is not at the start or end
     if '@' not in email or email[0] == '@' or email[-1] == '@':
         valid = False
     # Ensure that there is a dot after the @.
-    elif email.find('.', email.index('@')) != -1:
+    elif email.find('.', email.index('@')) == -1:
         valid = False
     return valid
 
@@ -78,6 +79,9 @@ def authenticate(login_clicks, signup_clicks, email, password):
 
     # SIGN UP
     if dash.ctx.triggered_id == "signup-btn":   # Checks which button triggered the callback
+        # Checks for an invalid email format
+        if not validate_email(email):
+            return "Invalid email", "", None
         try:
             # Insert new record into the database if the signup button was clicked
             cursor.execute(
